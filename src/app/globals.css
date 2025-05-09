@@ -3,9 +3,6 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -23,4 +20,109 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@media print {
+  /* Hide everything except the report content */
+  body * {
+    visibility: hidden;
+  }
+  
+  /* Show only the report content */
+  [data-print-section] *,
+  [data-print-section] {
+    visibility: visible;
+  }
+  
+  /* Position the report at the top of the page */
+  [data-print-section] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 1.5rem;
+    background-color: white !important;
+    color: black !important;
+  }
+  
+  /* Ensure proper layout for printing */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+  }
+  
+  th {
+    background-color: #f3f4f6 !important;
+    color: #1f2937 !important;
+    font-weight: bold;
+    border: 1px solid #374151;
+    padding: 8px;
+    font-size: 12px;
+  }
+  
+  td {
+    border: 1px solid #6b7280;
+    padding: 8px;
+    font-size: 12px;
+  }
+  
+  /* Style for total row */
+  tr:last-child td {
+    font-weight: bold;
+    background-color: #e5e7eb !important;
+  }
+  
+  /* Print header styles */
+  [data-print-section] h1 {
+    font-size: 18px;
+    margin-bottom: 4px;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  [data-print-section] h2 {
+    font-size: 16px;
+    margin-top: 12px;
+    margin-bottom: 8px;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  [data-print-section] p {
+    text-align: center;
+    margin-bottom: 4px;
+  }
+  
+  /* Company header border */
+  [data-print-section] .company-header {
+    border-bottom: 2px solid #111827;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+  }
+  
+  /* Hide UI elements when printing */
+  .print\:hidden {
+    display: none !important;
+  }
+  
+  /* Show elements only when printing */
+  .print\:block {
+    display: block !important;
+  }
+  
+  /* Remove background colors and shadows */
+  .print\:shadow-none {
+    box-shadow: none !important;
+  }
+  
+  .print\:border-0 {
+    border: 0 !important;
+  }
+  
+  /* Set page to landscape for better table viewing */
+  @page {
+    size: landscape;
+    margin: 0.5cm;
+  }
 }
