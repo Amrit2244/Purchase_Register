@@ -77,10 +77,28 @@ export default function DashboardLayout({
                   Purchase Entry
                 </Link>
                 <Link
+                  href="/dashboard/edit-entry"
+                  className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                >
+                  Edit Entries
+                </Link>
+                <Link
                   href="/dashboard/reports/by-parties"
                   className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
                 >
                   Party Reports
+                </Link>
+                <Link
+                  href="/dashboard/reports/by-item"
+                  className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                >
+                  Item Reports
+                </Link>
+                <Link
+                  href="/dashboard/reports/all-entries"
+                  className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                >
+                  All Entries Report
                 </Link>
                 {session?.user?.role === 'admin' && (
                   <Link

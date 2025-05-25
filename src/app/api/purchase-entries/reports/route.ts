@@ -8,6 +8,7 @@ export async function GET(request: Request) {
     const fromDate = searchParams.get('fromDate');
     const toDate = searchParams.get('toDate');
     const party = searchParams.get('party');
+    const item = searchParams.get('item');
     
     await connectDB();
 
@@ -30,6 +31,10 @@ export async function GET(request: Request) {
     
     if (party) {
       query.party = party;
+    }
+
+    if (item) {
+      query.item = item;
     }
     
     // Execute the query with filters
