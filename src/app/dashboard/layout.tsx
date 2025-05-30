@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react'; // Added useEffect
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -26,15 +27,23 @@ export default function DashboardLayout({
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  if (status === 'loading') {
-    return <div>Loading...</div>;
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/login');
+    }
+  }, [status, router]);
+
+  if (status === 'loading' || status === 'unauthenticated') {
+    // Show a loading indicator or a blank screen while session is loading or redirecting
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="text-lg font-medium text-gray-600">Loading session...</div>
+        {/* Or return null for a blank screen during redirect */}
+      </div>
+    );
   }
 
-  if (!session) {
-    router.push('/login');
-    return null;
-  }
-
+  // Only render the full layout if authenticated
   return (
     <div className="min-h-screen bg-gray-100">
       <nav className="bg-white shadow-lg">
