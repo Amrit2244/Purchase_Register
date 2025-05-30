@@ -83,6 +83,12 @@ export default function DashboardLayout({
                   Edit Entries
                 </Link>
                 <Link
+                  href="/dashboard/delete-entry"
+                  className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                >
+                  Delete Entry
+                </Link>
+                <Link
                   href="/dashboard/reports/by-parties"
                   className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
                 >

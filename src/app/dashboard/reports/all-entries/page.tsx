@@ -527,13 +527,13 @@ export default function AllEntriesReportPage() {
                     ))}
                     
                     <tr className="bg-gradient-to-r from-gray-100 to-gray-200 font-semibold">
-                      <td colSpan={6} className="px-4 py-2 whitespace-nowrap text-xs text-gray-900 text-right print:px-2 print:py-1">
+                      <td colSpan={6} className="px-4 py-2 whitespace-nowrap text-xs text-gray-900 text-right print:px-2 print:py-1"> {/* Reverted colSpan */}
                         Total Quantity:
                       </td>
                       <td className="px-4 py-2 whitespace-nowrap text-xs font-bold text-red-700 text-right print:px-2 print:py-1">
                         {totalQuantity}
                       </td>
-                      <td className="print:px-2 print:py-1"></td>
+                      <td className="print:px-2 print:py-1"></td> {/* Reverted to original empty or placeholder td */}
                     </tr>
                   </tbody>
                 </table>
