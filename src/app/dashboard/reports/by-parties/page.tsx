@@ -175,28 +175,6 @@ export default function PartyReportsPage() {
     });
   };
 
-  const handleDelete = async (entryId: string) => {
-    if (window.confirm('Are you sure you want to delete this entry?')) {
-      try {
-        const response = await fetch(`/api/purchase-entries/${entryId}`, {
-          method: 'DELETE',
-        });
-
-        if (response.ok) {
-          setEntries(prevEntries => prevEntries.filter(entry => entry._id !== entryId));
-          toast.success('Entry deleted successfully');
-          // totalQuantity will recalculate automatically as it depends on 'entries' state
-        } else {
-          const errorData = await response.json();
-          toast.error(errorData.message || 'Failed to delete entry');
-        }
-      } catch (error) {
-        console.error('Error deleting entry:', error);
-        toast.error('An error occurred while deleting the entry.');
-      }
-    }
-  };
-
   // Calculate total quantity
   const totalQuantity = entries.reduce((total, entry) => total + entry.quantity, 0);
 
@@ -854,14 +832,11 @@ export default function PartyReportsPage() {
                       <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                         Origin Form J No
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider print:hidden">
-                        Actions
-                      </th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     {entries.map((entry, index) => (
-                      <tr key={entry._id} className={`${index % 2 === 0 ? 'bg-white' : 'bg-indigo-50'} hover:bg-indigo-100 transition-colors`}>
+                      <tr key={entry._id} className={index % 2 === 0 ? 'bg-white' : 'bg-indigo-50'}>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                           {entry.serialNumber.toString().padStart(2, '0')}
                         </td>
@@ -886,26 +861,18 @@ export default function PartyReportsPage() {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                           {entry.originFormJNo}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 print:hidden">
-                          <button
-                            onClick={() => handleDelete(entry._id)}
-                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"
-                          >
-                            Delete
-                          </button>
-                        </td>
                       </tr>
                     ))}
                     
                     {/* Total Row */}
-                    <tr className="bg-gradient-to-r from-red-50 to-red-100 font-semibold">
-                      <td colSpan={7} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right"> {/* Adjusted colSpan */}
+                    <tr className="bg-gradient-to-r from-red-50 to-red-100">
+                      <td colSpan={6} className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 text-right">
                         Total Quantity:
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-red-700 text-right">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-red-700">
                         {totalQuantity}
                       </td>
-                      <td className="print:hidden"></td> {/* Empty cell for actions column in total row */}
+                      <td></td>
                     </tr>
                   </tbody>
                 </table>

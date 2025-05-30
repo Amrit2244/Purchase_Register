@@ -140,28 +140,6 @@ export default function AllEntriesReportPage() {
     });
   };
 
-  const handleDelete = async (entryId: string) => {
-    if (window.confirm('Are you sure you want to delete this entry?')) {
-      try {
-        const response = await fetch(`/api/purchase-entries/${entryId}`, {
-          method: 'DELETE',
-        });
-
-        if (response.ok) {
-          setEntries(prevEntries => prevEntries.filter(entry => entry._id !== entryId));
-          toast.success('Entry deleted successfully');
-          // totalQuantity will recalculate automatically as it depends on 'entries' state
-        } else {
-          const errorData = await response.json();
-          toast.error(errorData.message || 'Failed to delete entry');
-        }
-      } catch (error) {
-        console.error('Error deleting entry:', error);
-        toast.error('An error occurred while deleting the entry.');
-      }
-    }
-  };
-
   const totalQuantity = entries.reduce((total, entry) => total + entry.quantity, 0);
 
   const exportToExcel = () => {
@@ -511,7 +489,7 @@ export default function AllEntriesReportPage() {
                 <table className="min-w-full divide-y divide-gray-200 border border-gray-300"> {/* Added border to table */}
                   <thead className="bg-gradient-to-r from-indigo-600 to-blue-500">
                     <tr>
-                      {['Serial No', 'Date', 'Vehicle No', 'Party', 'Item', 'Transit Pass No', 'Quantity', 'Origin Form J No', 'Actions'].map(header => (
+                      {['Serial No', 'Date', 'Vehicle No', 'Party', 'Item', 'Transit Pass No', 'Quantity', 'Origin Form J No'].map(header => (
                         <th key={header} className="px-4 py-2 text-left text-xs font-medium text-white uppercase tracking-wider print:px-2 print:py-1">
                           {header}
                         </th>
@@ -545,25 +523,17 @@ export default function AllEntriesReportPage() {
                         <td className="px-4 py-2 whitespace-nowrap text-xs text-gray-700 print:px-2 print:py-1">
                           {entry.originFormJNo}
                         </td>
-                        <td className="px-4 py-2 whitespace-nowrap text-xs text-gray-700 print:px-2 print:py-1 print:hidden">
-                          <button
-                            onClick={() => handleDelete(entry._id)}
-                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"
-                          >
-                            Delete
-                          </button>
-                        </td>
                       </tr>
                     ))}
                     
                     <tr className="bg-gradient-to-r from-gray-100 to-gray-200 font-semibold">
-                      <td colSpan={7} className="px-4 py-2 whitespace-nowrap text-xs text-gray-900 text-right print:px-2 print:py-1"> {/* Adjusted colSpan */}
+                      <td colSpan={6} className="px-4 py-2 whitespace-nowrap text-xs text-gray-900 text-right print:px-2 print:py-1"> {/* Reverted colSpan */}
                         Total Quantity:
                       </td>
                       <td className="px-4 py-2 whitespace-nowrap text-xs font-bold text-red-700 text-right print:px-2 print:py-1">
                         {totalQuantity}
                       </td>
-                      <td className="print:px-2 print:py-1 print:hidden"></td> {/* Empty cell for actions column in total row */}
+                      <td className="print:px-2 print:py-1"></td> {/* Reverted to original empty or placeholder td */}
                     </tr>
                   </tbody>
                 </table>
