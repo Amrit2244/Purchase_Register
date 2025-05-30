@@ -103,3 +103,29 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     return NextResponse.json({ message: 'Error updating purchase entry', error: error.message }, { status: 500 });
   }
 }
+
+export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+  try {
+    await connectDB();
+    const { id } = params;
+
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return NextResponse.json({ message: 'Invalid ID format' }, { status: 400 });
+    }
+
+    const deletedEntry = await PurchaseEntry.findByIdAndDelete(id);
+
+    if (!deletedEntry) {
+      return NextResponse.json({ message: 'Purchase entry not found' }, { status: 404 });
+    }
+
+    return NextResponse.json({ message: 'Purchase entry deleted successfully' }, { status: 200 });
+  } catch (error: any) {
+    console.error('Error deleting purchase entry:', error);
+    if (error.name === 'CastError') {
+      // This specific check might be redundant if the regex check for ID format is robust
+      return NextResponse.json({ message: 'Invalid ID format' }, { status: 400 });
+    }
+    return NextResponse.json({ message: 'Error deleting purchase entry', error: error.message }, { status: 500 });
+  }
+}
