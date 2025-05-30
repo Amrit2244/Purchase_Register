@@ -60,7 +60,7 @@ export default function DashboardLayout({
                 />
                 <span className="text-xl font-bold text-white">Purchase Register</span> {/* Updated text color */}
               </div>
-              <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+              <div className="hidden sm:ml-6 sm:flex sm:space-x-4"> {/* Simplified spacing */}
                 <Link
                   href="/dashboard"
                   className="border-indigo-300 text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" // Active link style + transition
