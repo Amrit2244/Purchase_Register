@@ -1,23 +1,24 @@
-// app/settings/SettingsContent.tsx
 'use client';
 
 import { CSSProperties } from 'react';
-import { useTheme } from '../../../contexts/ThemeContext'; // Adjust path as needed
+import { useTheme } from '../../../contexts/ThemeContext'; // Adjusted path if necessary
 
-interface SettingsContentProps {
+// Define props for SettingsContent to accept the app version
+export interface SettingsContentProps { // Exporting for potential use elsewhere, though not strictly needed for this refactor
   appVersion: string;
 }
 
 export default function SettingsContent({ appVersion }: SettingsContentProps) {
   const { theme, updateTheme } = useTheme();
 
-  const handleFontSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newSize = parseInt(e.target.value, 10);
+  // Placeholder for theme update logic
+  const handleFontSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const newSize = parseInt(event.target.value, 10);
     updateTheme({ fontSize: newSize });
   };
 
-  const handlePrimaryColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateTheme({ colors: { ...theme.colors, primary: e.target.value } });
+  const handlePrimaryColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    updateTheme({ colors: { ...theme.colors, primary: event.target.value } });
   };
 
   const toggleThemeMode = () => {
@@ -26,26 +27,30 @@ export default function SettingsContent({ appVersion }: SettingsContentProps) {
         mode: 'dark',
         colors: {
           ...theme.colors,
-          background: '#121212',
-          text: '#E0E0E0',
-          card_background: '#1E1E1E',
-          border: '#333333',
-        },
+          background: '#121212', // Example dark bg
+          text: '#E0E0E0', // Example dark text
+          card_background: '#1E1E1E', // Example dark card bg
+          border: '#333333', // Example dark border
+          // You might need to adjust other colors like primary, secondary for dark mode
+        }
       });
     } else {
       updateTheme({
         mode: 'light',
         colors: {
-          ...theme.colors,
+          ...theme.colors, // Reset to potentially light-mode defaults or maintain current
+          primary: theme.colors.primary, // Keep current primary or reset
+          secondary: theme.colors.secondary, // Keep current secondary or reset
           background: '#ffffff',
           text: '#212529',
           card_background: '#f8f9fa',
           border: '#dee2e6',
-        },
+        }
       });
     }
   };
 
+  // Inline styles for components on this page
   const sectionStyle: CSSProperties = {
     marginBottom: '2rem',
     padding: '1.5rem',
@@ -88,29 +93,39 @@ export default function SettingsContent({ appVersion }: SettingsContentProps) {
     fontSize: '1rem',
   };
 
+
   return (
     <div style={{ color: theme.colors.text, fontSize: `${theme.fontSize}px` }}>
-      <h1 style={{ color: theme.colors.primary, fontSize: '2rem', marginBottom: '1.5rem' }}>
+      <h1 className="text-3xl font-bold mb-6" style={{ color: theme.colors.primary }}>
         App Settings
       </h1>
 
-      {/* Theme Settings */}
+      {/* Theme Settings Section */}
       <section style={sectionStyle}>
-        <h2 style={titleStyle}>Theme Settings</h2>
+        <h2 className="text-2xl font-semibold" style={titleStyle}>
+          Theme Settings
+        </h2>
 
+        {/* Theme Mode Toggle */}
         <div style={{ marginBottom: '1rem' }}>
           <label style={labelStyle}>Theme Mode:</label>
           <button onClick={toggleThemeMode} style={buttonStyle}>
             Switch to {theme.mode === 'light' ? 'Dark' : 'Light'} Mode
           </button>
-          <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: theme.colors.muted }}>
-            Current Mode: {theme.mode}
-          </p>
+          <p style={{marginTop: '0.5rem', fontSize: '0.9rem', color: theme.colors.muted}}>Current Mode: {theme.mode}</p>
         </div>
 
+        {/* Font Size Selector */}
         <div style={{ marginBottom: '1rem' }}>
-          <label htmlFor="fontSize" style={labelStyle}>Font Size:</label>
-          <select id="fontSize" value={theme.fontSize} onChange={handleFontSizeChange} style={inputStyle}>
+          <label htmlFor="fontSize" style={labelStyle}>
+            Font Size:
+          </label>
+          <select
+            id="fontSize"
+            value={theme.fontSize}
+            onChange={handleFontSizeChange}
+            style={inputStyle}
+          >
             <option value="14">14px (Small)</option>
             <option value="16">16px (Normal)</option>
             <option value="18">18px (Large)</option>
@@ -118,28 +133,34 @@ export default function SettingsContent({ appVersion }: SettingsContentProps) {
           </select>
         </div>
 
+        {/* Primary Color Picker */}
         <div style={{ marginBottom: '1rem' }}>
-          <label htmlFor="primaryColor" style={labelStyle}>Primary Color:</label>
+          <label htmlFor="primaryColor" style={labelStyle}>
+            Primary Color:
+          </label>
           <input
             type="color"
             id="primaryColor"
             value={theme.colors.primary}
             onChange={handlePrimaryColorChange}
-            style={{ ...inputStyle, height: '40px', padding: '0.25rem' }}
+            style={{...inputStyle, height: '40px', padding: '0.25rem'}}
           />
         </div>
-
         <p style={{ fontSize: '0.9rem', color: theme.colors.muted }}>
-          More theme customization options (secondary color, background, text) can be added here.
+          More theme customization options (secondary color, text color, background color) can be added here.
         </p>
       </section>
 
-      {/* App Info */}
+      {/* Application Information Section */}
       <section style={sectionStyle}>
-        <h2 style={titleStyle}>Application Information</h2>
-        <p><strong>Version:</strong> {appVersion}</p>
+        <h2 className="text-2xl font-semibold" style={titleStyle}>
+          Application Information
+        </h2>
+        <p>
+          <span style={{ fontWeight: 'bold' }}>Version:</span> {appVersion}
+        </p>
         <p style={{ fontSize: '0.9rem', color: theme.colors.muted, marginTop: '1rem' }}>
-          This section can include build info, release notes, or update details.
+          This section can display build number, last update date, or other relevant application details.
         </p>
       </section>
     </div>
