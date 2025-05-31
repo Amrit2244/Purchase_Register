@@ -599,9 +599,9 @@ export default function ItemReportsPage() {
               >
                 <option value="">Select Item</option> {/* Changed placeholder */}
                 {items.map((item) => ( // Changed from parties to items
-                  <option key={item._id} value={item._id}>
+                  (<option key={item._id} value={item._id}>
                     {item.name}
-                  </option>
+                  </option>)
                 ))}
               </select>
             </div>
