@@ -55,9 +55,9 @@ function LoginContent() {
   };
 
   const focusInputStyle: CSSProperties = { // For focus:ring and focus:border
-    '--tw-ring-color': 'var(--color-primary)',
+    ['--tw-ring-color' as string]: 'var(--color-primary)',
     borderColor: 'var(--color-primary)',
-  };
+  } as CSSProperties;
 
 
   return (

@@ -12,7 +12,7 @@ export default async function SettingsPage() {
   // For this environment, we'll use the string obtained from the tool.
   const packageJsonContent = `{
     "name": "purchase_register",
-    "version": "0.1.0",
+    "version": "5.01.02",
     "private": true,
     "scripts": {
       "dev": "next dev --turbopack",
@@ -56,27 +56,6 @@ export default async function SettingsPage() {
   const packageJson = JSON.parse(packageJsonContent);
   const appVersion = packageJson.version || "N/A";
 
-  // SettingsContent is now imported from its own file, which is marked 'use client'.
-  // The parent SettingsPage remains a Server Component.
-
-
-// app/settings/page.tsx (or wherever your route is located)
-
-// This is a Server Component — no 'use client'
-import SettingsContent from './SettingsContent';
-
-export default async function SettingsPage() {
-  // Simulated package.json content (in real app, read from disk or env)
-  const packageJsonContent = `{
-    "name": "purchase_register",
-    "version": "0.1.0",
-    "private": true
-  }`;
-
-  const packageJson = JSON.parse(packageJsonContent);
-  const appVersion = packageJson.version || "N/A";
-
-
-
   return <SettingsContent appVersion={appVersion} />;
 }
+  

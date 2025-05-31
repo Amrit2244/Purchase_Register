@@ -5,8 +5,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import NextAuth from "next-auth";
-import { ThemeProvider, useTheme } from '../../contexts/ThemeContext'; // Adjusted path
+import { ThemeProvider, useTheme } from '@/contexts/ThemeContext'; // Adjusted path
 
 declare module "next-auth" {
   interface Session {
@@ -90,23 +89,23 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
                 <Link
                   href="/dashboard/parties"
                   className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out"
-                  style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary_muted || '#E0E0E0', }} // Example muted link
+                  style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary || '#E0E0E0', }} // Example link
                 >
                   Parties
                 </Link>
                 {/* Add similar styling for other links */}
-                <Link href="/dashboard/items" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary_muted || '#E0E0E0', }}>Items</Link>
-                <Link href="/dashboard/purchase-entry" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary_muted || '#E0E0E0', }}>Purchase Entry</Link>
-                <Link href="/dashboard/edit-entry" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary_muted || '#E0E0E0', }}>Edit Entries</Link>
-                <Link href="/dashboard/delete-entry" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary_muted || '#E0E0E0', }}>Delete Entry</Link>
-                <Link href="/dashboard/reports/by-parties" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary_muted || '#E0E0E0', }}>Party Reports</Link>
-                <Link href="/dashboard/reports/by-item" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary_muted || '#E0E0E0', }}>Item Reports</Link>
-                <Link href="/dashboard/reports/all-entries" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary_muted || '#E0E0E0', }}>All Entries Report</Link>
+                <Link href="/dashboard/items" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary || '#E0E0E0', }}>Items</Link>
+                <Link href="/dashboard/purchase-entry" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary || '#E0E0E0', }}>Purchase Entry</Link>
+                <Link href="/dashboard/edit-entry" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary || '#E0E0E0', }}>Edit Entries</Link>
+                <Link href="/dashboard/delete-entry" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary || '#E0E0E0', }}>Delete Entry</Link>
+                <Link href="/dashboard/reports/by-parties" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary || '#E0E0E0', }}>Party Reports</Link>
+                <Link href="/dashboard/reports/by-item" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary || '#E0E0E0', }}>Item Reports</Link>
+                <Link href="/dashboard/reports/all-entries" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary || '#E0E0E0', }}>All Entries Report</Link>
                 {session?.user?.role === 'admin' && (
                   <Link
                     href="/dashboard/users"
                     className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out"
-                    style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary_muted || '#E0E0E0', }}
+                    style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary || '#E0E0E0', }}
                   >
                     User Management
                   </Link>
@@ -114,14 +113,21 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
                 <Link
                   href="/dashboard/settings"
                   className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out"
-                  style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary_muted || '#E0E0E0', }}
+                  style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary || '#E0E0E0', }}
                 >
                   App Settings
                 </Link>
               </div>
             </div>
             <div className="flex items-center">
-              <span className="mr-4" style={{ color: theme.mode === 'dark' ? '#F0F0F0' : theme.colors.text_on_primary_accent || '#F0F0F0' }}>
+              <span
+                className="mr-4"
+                style={{
+                  color: theme.mode === 'dark'
+                    ? '#F0F0F0'
+                    : theme.colors.text_on_primary || '#F0F0F0' // Use text_on_primary instead
+                }}
+              >
                 Welcome, {session?.user?.name}
               </span>
               <button
@@ -151,4 +157,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <DashboardLayoutContent>{children}</DashboardLayoutContent>
     </ThemeProvider>
   );
+}
+
+// or wherever your ThemeColors type is defined
+
+interface ThemeColors {
+  primary: string;
+  secondary: string;
+  text_on_primary: string;
+  text_on_secondary: string;
+  text_on_primary_accent: string; // Add this line
+  // ...other color properties
 }
