@@ -1,5 +1,5 @@
-'use client';
 
+'use client';
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 
 // Define the types for theme properties
