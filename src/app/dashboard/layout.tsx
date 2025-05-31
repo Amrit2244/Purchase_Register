@@ -1,31 +1,30 @@
 'use client';
 
-import { useEffect } from 'react'; // Added useEffect
+import { useEffect, CSSProperties } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import NextAuth from "next-auth"
+import NextAuth from "next-auth";
+import { ThemeProvider, useTheme } from '../../contexts/ThemeContext'; // Adjusted path
 
 declare module "next-auth" {
   interface Session {
     user?: {
-      username?: string
-      role?: string
-      id?: string
-      name?: string | null
-      email?: string | null
-      image?: string | null
-    }
+      username?: string;
+      role?: string;
+      id?: string;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+    };
   }
 }
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+
+function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const { theme } = useTheme(); // Access theme properties
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -34,104 +33,101 @@ export default function DashboardLayout({
   }, [status, router]);
 
   if (status === 'loading' || status === 'unauthenticated') {
-    // Show a loading indicator or a blank screen while session is loading or redirecting
     return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-100"> {/* Updated background */}
-        <div className="text-lg font-medium text-gray-600">Loading session...</div>
-        {/* Or return null for a blank screen during redirect */}
+      <div
+        className="flex items-center justify-center min-h-screen"
+        style={{
+          backgroundColor: 'var(--color-background)', // Use CSS variable
+          color: 'var(--color-text)', // Use CSS variable
+        }}
+      >
+        <div className="text-lg font-medium">Loading session...</div>
       </div>
     );
   }
 
-  // Only render the full layout if authenticated
+  // CSS properties to set CSS variables from the theme
+  const themeStyles: CSSProperties = {
+    '--color-primary': theme.colors.primary,
+    '--color-secondary': theme.colors.secondary,
+    '--color-background': theme.colors.background,
+    '--color-text': theme.colors.text,
+    '--font-size-base': `${theme.fontSize}px`,
+  } as CSSProperties; // Type assertion for CSS custom properties
+
   return (
-    <div className="min-h-screen bg-slate-100"> {/* Updated background */}
-      <nav className="bg-indigo-700 shadow-lg"> {/* Updated navbar background */}
+    <div
+      className="min-h-screen"
+      style={themeStyles} // Apply theme variables here
+    >
+      {/* Apply background color from CSS variable set in globals.css body or by themeStyles */}
+      <nav className="shadow-lg" style={{ backgroundColor: 'var(--color-primary)'}}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between h-16">
             <div className="flex">
               <div className="flex-shrink-0 flex items-center">
-                <Image 
-                  src="/logo.svg" // Assuming logo is suitable for dark backgrounds or use a different one
-                  alt="Purchase Register Logo" 
-                  width={40} 
-                  height={40} 
-                  className="mr-2" // Filter invert might be needed if logo is dark: filter invert
+                <Image
+                  src="/logo.svg"
+                  alt="Purchase Register Logo"
+                  width={40}
+                  height={40}
+                  className="mr-2"
                 />
-                <span className="text-xl font-bold text-white">Purchase Register</span> {/* Updated text color */}
+                {/* Text color will be inherited or explicitly set if needed */}
+                <span className="text-xl font-bold" style={{ color: theme.mode === 'dark' ? '#FFFFFF' : theme.colors.text_on_primary || '#FFFFFF' }}>
+                  Purchase Register
+                </span>
               </div>
-              <div className="hidden sm:ml-6 sm:flex sm:space-x-4"> {/* Simplified spacing */}
+              {/* Links will use themed text colors based on body styles or specific link styling if added */}
+              <div className="hidden sm:ml-6 sm:flex sm:space-x-4">
                 <Link
                   href="/dashboard"
-                  className="border-indigo-300 text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" // Active link style + transition
+                  className="border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out"
+                  style={{ color: theme.mode === 'dark' ? '#FFFFFF' : theme.colors.text_on_primary || '#FFFFFF', borderColor: theme.colors.secondary }} // Example active link
                 >
                   Dashboard
                 </Link>
                 <Link
                   href="/dashboard/parties"
-                  className="border-transparent text-indigo-200 hover:border-indigo-300 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out"
+                  className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out"
+                  style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary_muted || '#E0E0E0', }} // Example muted link
                 >
                   Parties
                 </Link>
-                <Link
-                  href="/dashboard/items"
-                  className="border-transparent text-indigo-200 hover:border-indigo-300 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out"
-                >
-                  Items
-                </Link>
-                <Link
-                  href="/dashboard/purchase-entry"
-                  className="border-transparent text-indigo-200 hover:border-indigo-300 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out"
-                >
-                  Purchase Entry
-                </Link>
-                <Link
-                  href="/dashboard/edit-entry"
-                  className="border-transparent text-indigo-200 hover:border-indigo-300 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out"
-                >
-                  Edit Entries
-                </Link>
-                <Link
-                  href="/dashboard/delete-entry"
-                  className="border-transparent text-indigo-200 hover:border-indigo-300 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out"
-                >
-                  Delete Entry
-                </Link>
-                <Link
-                  href="/dashboard/reports/by-parties"
-                  className="border-transparent text-indigo-200 hover:border-indigo-300 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out"
-                >
-                  Party Reports
-                </Link>
-                <Link
-                  href="/dashboard/reports/by-item"
-                  className="border-transparent text-indigo-200 hover:border-indigo-300 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out"
-                >
-                  Item Reports
-                </Link>
-                <Link
-                  href="/dashboard/reports/all-entries"
-                  className="border-transparent text-indigo-200 hover:border-indigo-300 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out"
-                >
-                  All Entries Report
-                </Link>
+                {/* Add similar styling for other links */}
+                <Link href="/dashboard/items" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary_muted || '#E0E0E0', }}>Items</Link>
+                <Link href="/dashboard/purchase-entry" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary_muted || '#E0E0E0', }}>Purchase Entry</Link>
+                <Link href="/dashboard/edit-entry" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary_muted || '#E0E0E0', }}>Edit Entries</Link>
+                <Link href="/dashboard/delete-entry" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary_muted || '#E0E0E0', }}>Delete Entry</Link>
+                <Link href="/dashboard/reports/by-parties" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary_muted || '#E0E0E0', }}>Party Reports</Link>
+                <Link href="/dashboard/reports/by-item" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary_muted || '#E0E0E0', }}>Item Reports</Link>
+                <Link href="/dashboard/reports/all-entries" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary_muted || '#E0E0E0', }}>All Entries Report</Link>
                 {session?.user?.role === 'admin' && (
                   <Link
                     href="/dashboard/users"
-                    className="border-transparent text-indigo-200 hover:border-indigo-300 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out"
+                    className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out"
+                    style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary_muted || '#E0E0E0', }}
                   >
                     User Management
                   </Link>
                 )}
+                <Link
+                  href="/dashboard/settings"
+                  className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out"
+                  style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary_muted || '#E0E0E0', }}
+                >
+                  App Settings
+                </Link>
               </div>
             </div>
             <div className="flex items-center">
-              <span className="text-indigo-100 mr-4"> {/* Updated text color */}
+              <span className="mr-4" style={{ color: theme.mode === 'dark' ? '#F0F0F0' : theme.colors.text_on_primary_accent || '#F0F0F0' }}>
                 Welcome, {session?.user?.name}
               </span>
               <button
                 onClick={() => router.push('/api/auth/signout')}
-                className="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-md text-sm font-medium" /* Updated button style */
+                className="px-4 py-2 rounded-md text-sm font-medium hover:opacity-90"
+                style={{ backgroundColor: theme.colors.secondary, color: theme.mode === 'dark' ? '#FFFFFF' : theme.colors.text_on_secondary || '#FFFFFF' }}
               >
                 Sign Out
               </button>
@@ -140,9 +136,19 @@ export default function DashboardLayout({
         </div>
       </nav>
 
+      {/* Page content will inherit body background and text color from themeStyles */}
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         {children}
       </main>
     </div>
+  );
+}
+
+// Export default the wrapper component that includes ThemeProvider
+export default function DashboardLayout({ children }: { children: React.ReactNode; }) {
+  return (
+    <ThemeProvider>
+      <DashboardLayoutContent>{children}</DashboardLayoutContent>
+    </ThemeProvider>
   );
 }
