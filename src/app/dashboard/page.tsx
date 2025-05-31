@@ -1,10 +1,8 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-// useRouter and useEffect might not be needed if layout handles auth redirection
-// import { useRouter } from 'next/navigation';
-// import { useEffect } from 'react';
-import Link from 'next/link'; // Added Link import
+import Link from 'next/link';
+import { useTheme } from '../../contexts/ThemeContext'; // Import useTheme
 
 const menuItems = [
   {
@@ -65,55 +63,69 @@ const menuItems = [
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
-  // const router = useRouter(); // Potentially remove if layout handles all auth redirects
+  const { theme } = useTheme(); // Access theme properties
 
-  // useEffect(() => { // Potentially remove if layout handles all auth redirects
-  //   if (status === 'unauthenticated') {
-  //     router.push('/'); // Or '/login' as per layout
-  //   }
-  // }, [status, router]);
-
+  // Loading state is handled by DashboardLayoutContent now, but good for robustness
   if (status === 'loading') {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl text-gray-600">Loading...</div>
+        {/* Text color will be inherited from body which uses var(--color-text) */}
+        <div className="text-xl">Loading...</div>
       </div>
     );
   }
 
-  // The main layout (layout.tsx) should handle redirecting unauthenticated users.
-  // If session is null and status is not 'loading', it means unauthenticated.
-  // However, layout.tsx should prevent this page from rendering in that state.
-
+  // Page container - background color is inherited from the layout which sets CSS variables
   return (
-    // The min-h-screen and bg-gray-100 might be inherited from layout.tsx children wrapper
     <div className="p-4 md:p-8">
       <header className="mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold text-indigo-800">
+        {/* Heading uses primary color, paragraph uses general text color */}
+        <h1
+          className="text-3xl md:text-4xl font-bold"
+          style={{ color: 'var(--color-primary)' }}
+        >
           Dashboard Home
         </h1>
-        <p className="text-lg text-gray-600 mt-2">
+        {/* Text color inherited from body which uses var(--color-text) */}
+        <p className="text-lg mt-2">
           Welcome back, {session?.user?.name || 'User'}! Select an option to proceed.
         </p>
       </header>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {menuItems.map((item) => {
-          // Basic conditional rendering for User Management (can be enhanced)
           if (item.href === '/dashboard/users' && session?.user?.role !== 'admin') {
             return null;
           }
           return (
             <Link href={item.href} key={item.title} legacyBehavior>
-              <a className="block bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 border border-gray-200 group">
+              {/* Card styles use CSS variables for background, border, and text */}
+              <a
+                className="block p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 group"
+                style={{
+                  backgroundColor: theme.mode === 'dark' ? theme.colors.secondary : theme.colors.background, // Example: lighter background for cards in dark, main in light
+                  borderColor: theme.colors.secondary, // Use secondary for border
+                  borderWidth: '1px', // Ensure border is visible
+                  color: 'var(--color-text)' // General text color for card content
+                }}
+              >
                 <div className="flex flex-col items-center text-center">
-                  <div className="text-4xl mb-4 text-indigo-500 group-hover:text-indigo-600 transition-colors">
+                  {/* Icon color can be primary or secondary */}
+                  <div
+                    className="text-4xl mb-4 transition-colors"
+                    style={{ color: 'var(--color-primary)' }} // Icon color
+                  >
                     {item.icon}
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">
+                  {/* Title color can be primary on hover, default text otherwise */}
+                  <h3
+                    className="text-xl font-semibold mb-2 transition-colors group-hover:text-[var(--color-primary)]"
+                    // style={{ color: 'var(--color-text)' }} // Handled by parent 'a' tag
+                  >
                     {item.title}
                   </h3>
-                  <p className="text-sm text-gray-600">
+                  {/* Description text color inherited */}
+                  <p className="text-sm">
                     {item.description}
                   </p>
                 </div>
