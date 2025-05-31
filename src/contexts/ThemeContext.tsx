@@ -92,7 +92,7 @@ export const useTheme = (): ThemeContextType => {
   }
   return context;
 };
-=======
+
 // app/settings/SettingsContent.tsx
 'use client';
 
@@ -240,3 +240,4 @@ export default function SettingsContent({ appVersion }: SettingsContentProps) {
     </div>
   );
 }
+
