@@ -1,7 +1,7 @@
-n
-'use client';
+'use client'
 
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+
+import React, { createContext, useState, useContext, ReactNode, CSSProperties } from 'react';
 
 // Define the types for theme properties
 interface ThemeColors {
@@ -94,17 +94,14 @@ export const useTheme = (): ThemeContextType => {
 };
 
 
-// app/settings/SettingsContent.tsx
-'use client';
-
-import { CSSProperties } from 'react';
-import { useTheme } from '../../../contexts/ThemeContext'; // Adjust path as needed
+// Export the context
+export { ThemeContext };
 
 interface SettingsContentProps {
   appVersion: string;
 }
 
-export default function SettingsContent({ appVersion }: SettingsContentProps) {
+export function SettingsContent({ appVersion }: SettingsContentProps) {
   const { theme, updateTheme } = useTheme();
 
   const handleFontSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

@@ -147,6 +147,7 @@ describe('ThemeContext', () => {
 
   it('updateTheme merges new color properties with existing ones correctly', () => {
     const initialPartialColors = {
+      ...expectedDefaultColors,
       primary: '#111111',
       background: '#DDDDDD',
     };
