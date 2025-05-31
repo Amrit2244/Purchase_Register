@@ -59,6 +59,7 @@ export default async function SettingsPage() {
   // SettingsContent is now imported from its own file, which is marked 'use client'.
   // The parent SettingsPage remains a Server Component.
 
+
 // app/settings/page.tsx (or wherever your route is located)
 
 // This is a Server Component — no 'use client'
@@ -74,6 +75,7 @@ export default async function SettingsPage() {
 
   const packageJson = JSON.parse(packageJsonContent);
   const appVersion = packageJson.version || "N/A";
+
 
 
   return <SettingsContent appVersion={appVersion} />;
