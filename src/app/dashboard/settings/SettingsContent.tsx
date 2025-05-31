@@ -3,6 +3,8 @@
 import { CSSProperties } from 'react';
 import { useTheme } from '@/contexts/ThemeContext'; // Using path alias
 
+
+
 // Define props for SettingsContent to accept the app version
 export interface SettingsContentProps { // Exporting for potential use elsewhere, though not strictly needed for this refactor
   appVersion: string;
