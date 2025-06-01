@@ -35,32 +35,16 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
     return (
       <div
         className="flex items-center justify-center min-h-screen"
-        style={{
-          backgroundColor: 'var(--color-background)', // Use CSS variable
-          color: 'var(--color-text)', // Use CSS variable
-        }}
+        className="flex items-center justify-center min-h-screen bg-background text-foreground"
       >
         <div className="text-lg font-medium">Loading session...</div>
       </div>
     );
   }
 
-  // CSS properties to set CSS variables from the theme
-  const themeStyles: CSSProperties = {
-    '--color-primary': theme.colors.primary,
-    '--color-secondary': theme.colors.secondary,
-    '--color-background': theme.colors.background,
-    '--color-text': theme.colors.text,
-    '--font-size-base': `${theme.fontSize}px`,
-  } as CSSProperties; // Type assertion for CSS custom properties
-
   return (
-    <div
-      className="min-h-screen"
-      style={themeStyles} // Apply theme variables here
-    >
-      {/* Apply background color from CSS variable set in globals.css body or by themeStyles */}
-      <nav className="shadow-lg" style={{ backgroundColor: 'var(--color-primary)'}}>
+    <div className="min-h-screen bg-background text-foreground">
+      <nav className="bg-primary text-text-on-primary shadow-lg">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between h-16">
             <div className="flex">
@@ -72,68 +56,53 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
                   height={40}
                   className="mr-2"
                 />
-                {/* Text color will be inherited or explicitly set if needed */}
-                <span className="text-xl font-bold" style={{ color: theme.mode === 'dark' ? '#FFFFFF' : theme.colors.text_on_primary || '#FFFFFF' }}>
+                <span className="text-xl font-bold text-text-on-primary">
                   Purchase Register
                 </span>
               </div>
-              {/* Links will use themed text colors based on body styles or specific link styling if added */}
               <div className="hidden sm:ml-6 sm:flex sm:space-x-4">
                 <Link
                   href="/dashboard"
-                  className="border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out"
-                  style={{ color: theme.mode === 'dark' ? '#FFFFFF' : theme.colors.text_on_primary || '#FFFFFF', borderColor: theme.colors.secondary }} // Example active link
+                  className="text-text-on-primary hover:text-accent border-secondary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out"
                 >
                   Dashboard
                 </Link>
                 <Link
                   href="/dashboard/parties"
-                  className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out"
-                  style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary || '#E0E0E0', }} // Example link
+                  className="text-text-on-primary hover:text-accent border-transparent hover:border-accent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out"
                 >
                   Parties
                 </Link>
-                {/* Add similar styling for other links */}
-                <Link href="/dashboard/items" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary || '#E0E0E0', }}>Items</Link>
-                <Link href="/dashboard/purchase-entry" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary || '#E0E0E0', }}>Purchase Entry</Link>
-                <Link href="/dashboard/edit-entry" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary || '#E0E0E0', }}>Edit Entries</Link>
-                <Link href="/dashboard/delete-entry" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary || '#E0E0E0', }}>Delete Entry</Link>
-                <Link href="/dashboard/reports/by-parties" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary || '#E0E0E0', }}>Party Reports</Link>
-                <Link href="/dashboard/reports/by-item" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary || '#E0E0E0', }}>Item Reports</Link>
-                <Link href="/dashboard/reports/all-entries" className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out" style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary || '#E0E0E0', }}>All Entries Report</Link>
+                <Link href="/dashboard/items" className="text-text-on-primary hover:text-accent border-transparent hover:border-accent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out">Items</Link>
+                <Link href="/dashboard/purchase-entry" className="text-text-on-primary hover:text-accent border-transparent hover:border-accent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out">Purchase Entry</Link>
+                <Link href="/dashboard/edit-entry" className="text-text-on-primary hover:text-accent border-transparent hover:border-accent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out">Edit Entries</Link>
+                <Link href="/dashboard/delete-entry" className="text-text-on-primary hover:text-accent border-transparent hover:border-accent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out">Delete Entry</Link>
+                <Link href="/dashboard/reports/by-parties" className="text-text-on-primary hover:text-accent border-transparent hover:border-accent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out">Party Reports</Link>
+                <Link href="/dashboard/reports/by-item" className="text-text-on-primary hover:text-accent border-transparent hover:border-accent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out">Item Reports</Link>
+                <Link href="/dashboard/reports/all-entries" className="text-text-on-primary hover:text-accent border-transparent hover:border-accent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out">All Entries Report</Link>
                 {session?.user?.role === 'admin' && (
                   <Link
                     href="/dashboard/users"
-                    className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out"
-                    style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary || '#E0E0E0', }}
+                    className="text-text-on-primary hover:text-accent border-transparent hover:border-accent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out"
                   >
                     User Management
                   </Link>
                 )}
                 <Link
                   href="/dashboard/settings"
-                  className="border-transparent hover:border-indigo-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out"
-                  style={{ color: theme.mode === 'dark' ? '#E0E0E0' : theme.colors.text_on_primary || '#E0E0E0', }}
+                  className="text-text-on-primary hover:text-accent border-transparent hover:border-accent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out"
                 >
                   App Settings
                 </Link>
               </div>
             </div>
             <div className="flex items-center">
-              <span
-                className="mr-4"
-                style={{
-                  color: theme.mode === 'dark'
-                    ? '#F0F0F0'
-                    : theme.colors.text_on_primary || '#F0F0F0' // Use text_on_primary instead
-                }}
-              >
+              <span className="mr-4 text-text-on-primary">
                 Welcome, {session?.user?.name}
               </span>
               <button
                 onClick={() => router.push('/api/auth/signout')}
-                className="px-4 py-2 rounded-md text-sm font-medium hover:opacity-90"
-                style={{ backgroundColor: theme.colors.secondary, color: theme.mode === 'dark' ? '#FFFFFF' : theme.colors.text_on_secondary || '#FFFFFF' }}
+                className="px-4 py-2 rounded-md text-sm font-medium bg-secondary text-text-on-secondary hover:opacity-90"
               >
                 Sign Out
               </button>

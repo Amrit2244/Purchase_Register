@@ -3,7 +3,7 @@
 // No 'use client' here as this is a Server Component
 
 // Import the client component
-import SettingsContent from './SettingsContent';
+import { SettingsContent } from '@/contexts/ThemeContext'; // Use SettingsContent from ThemeContext
 // ThemeProvider and useTheme are not directly used here anymore.
 // CSSProperties might not be needed either if all styling is in SettingsContent.
 
