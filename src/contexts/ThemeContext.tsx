@@ -32,16 +32,16 @@ interface ThemeContextType {
 // Default theme properties
 const defaultTheme: ThemeProperties = {
   colors: {
-    primary: '#007bff', // Blue
-    secondary: '#6c757d', // Gray
-    background: '#ffffff', // White
-    text: '#212529', // Dark Gray / Black
-    text_on_primary: '#ffffff', // White text on blue
-    text_on_secondary: '#ffffff', // White text on gray
-    accent: '#ffc107', // Yellow / Amber
-    border: '#dee2e6', // Light Gray
-    card_background: '#f8f9fa', // Very Light Gray, slightly off-white
-    muted: '#6c757d', // Same as secondary, for muted text
+    primary: '#0062E6', // Vibrant Blue
+    secondary: '#17A2B8', // Teal/Aqua
+    background: '#F8F9FA', // Light Gray
+    text: '#2A3B4C', // Dark Slate Gray
+    text_on_primary: '#FFFFFF', // White
+    text_on_secondary: '#FFFFFF', // White
+    accent: '#FF6B6B', // Coral Orange
+    border: '#CED4DA', // Light Subtle Gray
+    card_background: '#FFFFFF', // White
+    muted: '#6C757D', // Medium Gray
   },
   fontSize: 16,
   mode: 'light',
@@ -58,24 +58,60 @@ interface ThemeProviderProps {
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children, initialTheme }) => {
   const [theme, setTheme] = useState<ThemeProperties>({
+    // Initialize with defaultTheme, then merge initialTheme if provided
     ...defaultTheme,
     ...initialTheme,
     colors: {
       ...defaultTheme.colors,
-      ...(initialTheme?.colors || {}),
+      ...(initialTheme?.colors || {}), // Merge initialTheme colors if they exist
     },
+    // Merge other initialTheme properties if they exist
+    ...(initialTheme && initialTheme.fontSize && { fontSize: initialTheme.fontSize }),
+    ...(initialTheme && initialTheme.mode && { mode: initialTheme.mode }),
   });
 
   const updateTheme = (newTheme: Partial<ThemeProperties>) => {
-    setTheme(prevTheme => ({
-      ...prevTheme,
-      ...newTheme,
-      colors: {
-        ...prevTheme.colors,
-        ...(newTheme.colors || {}),
-      },
-    }));
+    setTheme(prevTheme => {
+      const updatedTheme = {
+        ...prevTheme,
+        ...newTheme,
+        colors: {
+          ...prevTheme.colors,
+          ...(newTheme.colors || {}),
+        },
+      };
+      return updatedTheme;
+    });
   };
+
+  React.useEffect(() => {
+    const root = document.documentElement;
+    if (theme && theme.colors) {
+      for (const [key, value] of Object.entries(theme.colors)) {
+        // Convert camelCase (e.g., card_background) to kebab-case (e.g., --color-card-background)
+        const cssVarName = `--color-${key.replace(/_/g, '-')}`;
+        root.style.setProperty(cssVarName, value);
+      }
+      // Ensure Tailwind's core --background and --foreground are also updated
+      // These are used by Tailwind's bg-background, text-foreground utilities
+      root.style.setProperty('--background', theme.colors.background);
+      root.style.setProperty('--foreground', theme.colors.text);
+    }
+
+    if (theme && theme.fontSize) {
+      root.style.setProperty('--font-size-base', `${theme.fontSize}px`);
+    }
+
+    if (theme && theme.mode) {
+      if (theme.mode === 'dark') {
+        root.classList.add('dark');
+        root.classList.remove('light');
+      } else {
+        root.classList.add('light');
+        root.classList.remove('dark');
+      }
+    }
+  }, [theme]);
 
   return (
     <ThemeContext.Provider value={{ theme, updateTheme }}>
@@ -118,22 +154,25 @@ export function SettingsContent({ appVersion }: SettingsContentProps) {
       updateTheme({
         mode: 'dark',
         colors: {
-          ...theme.colors,
-          background: '#121212',
-          text: '#E0E0E0',
-          card_background: '#1E1E1E',
-          border: '#333333',
+          // ...theme.colors, // Preserve other custom colors if any, but override core dark mode palette
+          primary: '#3B82F6', // Desaturated Bright Blue
+          secondary: '#0891B2', // Desaturated Cyan
+          background: '#111827', // Near-black Gray
+          text: '#E5E7EB', // Light Off-white Gray
+          text_on_primary: '#F9FAFB', // Very Light Gray
+          text_on_secondary: '#F9FAFB', // Very Light Gray
+          accent: '#A855F7', // Vibrant Purple
+          border: '#374151', // Dark Gray (subtly lighter than background)
+          card_background: '#1F2937', // Dark Gray (lighter than main background)
+          muted: '#9CA3AF', // Lighter Gray
         },
       });
     } else {
+      // When switching back to light mode, revert to the defined default light theme colors
       updateTheme({
         mode: 'light',
         colors: {
-          ...theme.colors,
-          background: '#ffffff',
-          text: '#212529',
-          card_background: '#f8f9fa',
-          border: '#dee2e6',
+          ...defaultTheme.colors, // Use the new Vibrant Light palette
         },
       });
     }

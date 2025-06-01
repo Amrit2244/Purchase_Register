@@ -1,43 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap');
 @import "tailwindcss";
 @import 'react-toastify/dist/ReactToastify.css';
 
 :root {
   /* ThemeContext controlled variables */
-  --color-primary: #007bff; /* Default primary color */
-  --color-secondary: #6c757d; /* Default secondary color */
-  --color-background: #ffffff; /* Default background color */
-  --color-text: #212529; /* Default text color */
-  --font-size-base: 16px; /* Default font size */
+  --color-primary: #0062E6;
+  --color-secondary: #17A2B8;
+  --color-background: #F8F9FA;
+  --color-text: #2A3B4C;
+  --color-text-on-primary: #FFFFFF;
+  --color-text-on-secondary: #FFFFFF;
+  --color-accent: #FF6B6B;
+  --color-border: #CED4DA;
+  --color-card-background: #FFFFFF;
+  --color-muted: #6C757D;
+  --font-size-base: 16px;
 
-  /* Existing variables (can be kept or integrated later) */
-  --background: #ffffff;
-  --foreground: #171717;
-  --color-background-tw: var(--background); /* Renamed to avoid conflict if necessary */
-  --color-foreground-tw: var(--foreground); /* Renamed to avoid conflict if necessary */
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Existing variables for Tailwind integration */
+  --background: #F8F9FA; /* Should match --color-background */
+  --foreground: #2A3B4C; /* Should match --color-text */
+  --color-background-tw: var(--background);
+  --color-foreground-tw: var(--foreground);
+  --font-sans: 'Inter', sans-serif;
+  --font-heading: 'Poppins', sans-serif;
+  --font-mono: var(--font-geist-mono); /* Keeping mono as it wasn't specified for change */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Update these if the ThemeContext dark mode has different tailwind mappings */
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --color-primary: #3B82F6;
+    --color-secondary: #0891B2;
+    --color-background: #111827;
+    --color-text: #E5E7EB;
+    --color-text-on-primary: #F9FAFB;
+    --color-text-on-secondary: #F9FAFB;
+    --color-accent: #A855F7;
+    --color-border: #374151;
+    --color-card-background: #1F2937;
+    --color-muted: #9CA3AF;
 
-    /* Example: For dark mode, ThemeContext might set these: */
-    /* --color-primary: #someDarkPrimary; */
-    /* --color-secondary: #someDarkSecondary; */
-    /* --color-background: #121212; */
-    /* --color-text: #e0e0e0; */
+    /* Tailwind base colors for dark mode */
+    --background: #111827; /* Should match --color-background */
+    --foreground: #E5E7EB; /* Should match --color-text */
   }
 }
 
 body {
   background-color: var(--color-background);
   color: var(--color-text);
-  font-family: Arial, Helvetica, sans-serif; /* Consider making font-family a theme variable too */
+  font-family: var(--font-sans);
   font-size: var(--font-size-base);
 }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600; /* Poppins semi-bold */
+  margin-bottom: 0.5em;
+  color: var(--color-text); /* Ensure headings also use theme text color */
+}
+
+h1 { font-size: 2.25rem; line-height: 2.5rem; } /* Tailwind text-4xl */
+h2 { font-size: 1.875rem; line-height: 2.25rem; } /* Tailwind text-3xl */
+h3 { font-size: 1.5rem; line-height: 2rem; } /* Tailwind text-2xl */
+h4 { font-size: 1.25rem; line-height: 1.75rem; } /* Tailwind text-xl */
+h5 { font-size: 1.125rem; line-height: 1.75rem; } /* Tailwind text-lg */
+h6 { font-size: 1rem; line-height: 1.5rem; } /* Tailwind text-base */
 
 @media print {
   /* Hide everything except the report content */
@@ -92,6 +119,7 @@ body {
   
   /* Print header styles */
   [data-print-section] h1 {
+    font-family: var(--font-heading); /* Ensure print uses the heading font */
     font-size: 18px;
     margin-bottom: 4px;
     text-align: center;
@@ -99,6 +127,7 @@ body {
   }
   
   [data-print-section] h2 {
+    font-family: var(--font-heading); /* Ensure print uses the heading font */
     font-size: 16px;
     margin-top: 12px;
     margin-bottom: 8px;
