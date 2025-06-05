@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { motion } from 'framer-motion';
+import { toast } from 'react-hot-toast';
 
 interface Party {
   _id: string;
@@ -29,8 +30,6 @@ export default function PurchaseEntryPage() {
     quantity: '',
     originFormJNo: '',
   });
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
 
   useEffect(() => {
     fetchParties();
@@ -81,8 +80,6 @@ export default function PurchaseEntryPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-    setSuccess('');
     
     try {
       const response = await fetch('/api/purchase-entries', {
@@ -94,7 +91,7 @@ export default function PurchaseEntryPage() {
       });
 
       if (response.ok) {
-        setSuccess('Purchase entry added successfully!');
+        toast.success('Purchase entry added successfully!');
         
         // Increment serial number for next entry
         const nextNumber = nextSerialNumber + 1;
@@ -115,17 +112,17 @@ export default function PurchaseEntryPage() {
         
         // Check for duplicate entry error
         if (data.message === 'Duplicate entry not allowed') {
-          setError(`Duplicate Entry: ${data.error || 'An entry with this Transit Pass Number and Origin Form J Number already exists.'}`);
+          toast.error(`Duplicate Entry: ${data.error || 'An entry with this Transit Pass Number and Origin Form J Number already exists.'}`);
         } else if (data.errors) {
           // Handle validation errors
           const errorMessages = Object.values(data.errors).join(', ');
-          setError(`Validation failed: ${errorMessages}`);
+          toast.error(`Validation failed: ${errorMessages}`);
         } else {
-          setError(data.message || 'Error adding purchase entry');
+          toast.error(data.message || 'Error adding purchase entry');
         }
       }
     } catch (error) {
-      setError('Error adding purchase entry');
+      toast.error('Error adding purchase entry');
     }
   };
 
@@ -151,44 +148,6 @@ export default function PurchaseEntryPage() {
             <div className="h-1 w-24 bg-indigo-600 rounded-full"></div>
           </div>
           
-          {error && (
-            <motion.div 
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded-r-lg"
-            >
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <svg className="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm text-red-700">{error}</p>
-                </div>
-              </div>
-            </motion.div>
-          )}
-          
-          {success && (
-            <motion.div 
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-green-50 border-l-4 border-green-500 p-4 mb-6 rounded-r-lg"
-            >
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <svg className="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm text-green-700">{success}</p>
-                </div>
-              </div>
-            </motion.div>
-          )}
-
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Serial Number - Full Width */}
             <div className="md:col-span-2 bg-indigo-50 p-6 rounded-xl border-l-4 border-indigo-500">

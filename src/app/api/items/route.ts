@@ -41,8 +41,22 @@ export async function POST(request: Request) {
       { message: 'Item created successfully', item },
       { status: 201 }
     );
-  } catch (error) {
+  } catch (error: any) { // Added :any to error type
     console.error('Error creating item:', error);
+    if (error.name === 'ValidationError') {
+      const validationErrors: Record<string, string> = {};
+      for (const field in error.errors) {
+        validationErrors[field] = error.errors[field].message;
+      }
+      return NextResponse.json(
+        {
+          message: 'Validation failed for item creation',
+          errors: validationErrors
+        },
+        { status: 400 }
+      );
+    }
+    // Keep a generic error for other cases
     return NextResponse.json(
       { message: 'Error creating item' },
       { status: 500 }

@@ -63,22 +63,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // Also keep the combined check for extra security
-    const existingEntry = await PurchaseEntry.findOne({
-      transitPassNo: transitPassNo,
-      originFormJNo: originFormJNo
-    });
-
-    if (existingEntry) {
-      return NextResponse.json(
-        { 
-          message: 'Duplicate entry not allowed',
-          error: 'An entry with this Transit Pass Number and Origin Form J Number already exists.' 
-        },
-        { status: 400 }
-      );
-    }
-
     // Use the provided serialNumber (as an integer) from the client
     const entry = await PurchaseEntry.create({
       serialNumber: parseInt(serialNumber),
@@ -117,35 +101,33 @@ export async function POST(request: Request) {
     }
     
     // Handle duplicate key errors (MongoDB error code 11000)
-    if (error.code === 11000) {
-      // Check which field caused the duplicate key error
-      const keyPattern = error.keyPattern || {};
-      
-      if (keyPattern.transitPassNo) {
-        return NextResponse.json(
-          { 
-            message: 'Duplicate entry not allowed',
-            error: 'This Transit Pass Number is already in use.' 
-          },
-          { status: 400 }
-        );
-      } else if (keyPattern.originFormJNo) {
-        return NextResponse.json(
-          { 
-            message: 'Duplicate entry not allowed',
-            error: 'This Origin Form J Number is already in use.' 
-          },
-          { status: 400 }
-        );
-      } else {
-        return NextResponse.json(
-          { 
-            message: 'Duplicate entry not allowed',
-            error: 'A duplicate entry was detected.' 
-          },
-          { status: 400 }
-        );
+    if (error.code === 11000 && error.keyValue) {
+      const field = Object.keys(error.keyValue)[0];
+      const value = error.keyValue[field];
+      let userMessage = `The value '${value}' for field '${field}' already exists. Please use a different value.`;
+      // let errorDetail = `A duplicate entry was detected for ${field}: ${value}.`; // This line was in the instructions but seems unused. I'll keep it commented out.
+
+      if (field === 'serialNumber') {
+        userMessage = `Serial number '${value}' is already in use. Please refresh the page to get the latest serial number and try again.`;
+        // errorDetail = `Serial number '${value}' is already in use.`; // Also seems unused.
+      } else if (field === 'transitPassNo') {
+        userMessage = `Transit Pass Number '${value}' is already in use.`;
+        // errorDetail = `Transit Pass Number '${value}' is already in use.`; // Also seems unused.
+      } else if (field === 'originFormJNo') {
+        userMessage = `Origin Form J Number '${value}' is already in use.`;
+        // errorDetail = `Origin Form J Number '${value}' is already in use.`; // Also seems unused.
       }
+      // Add more specific messages for other unique fields if necessary
+
+      return NextResponse.json(
+        {
+          message: 'Duplicate entry not allowed', // General message for UI category
+          error: userMessage, // User-facing detailed message
+          field: field, // Field that caused the error
+          value: value    // Value that caused the error
+        },
+        { status: 400 }
+      );
     }
     
     return NextResponse.json(

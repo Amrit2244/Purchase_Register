@@ -44,28 +44,6 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     if (!id.match(/^[0-9a-fA-F]{24}$/)) {
       return NextResponse.json({ message: 'Invalid ID format' }, { status: 400 });
     }
-
-    // Duplicate check for transitPassNo
-    if (updatedData.transitPassNo) {
-      const existingTransitPass = await PurchaseEntry.findOne({ 
-        transitPassNo: updatedData.transitPassNo, 
-        _id: { $ne: id } 
-      });
-      if (existingTransitPass) {
-        return NextResponse.json({ message: 'Transit Pass Number already exists' }, { status: 400 });
-      }
-    }
-
-    // Duplicate check for originFormJNo
-    if (updatedData.originFormJNo) {
-      const existingOriginFormJ = await PurchaseEntry.findOne({ 
-        originFormJNo: updatedData.originFormJNo, 
-        _id: { $ne: id } 
-      });
-      if (existingOriginFormJ) {
-        return NextResponse.json({ message: 'Origin Form J Number already exists' }, { status: 400 });
-      }
-    }
     
     // Ensure date is correctly formatted if provided
     if (updatedData.date) {
@@ -95,10 +73,22 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     if (error.name === 'CastError') {
       return NextResponse.json({ message: 'Invalid ID format or data type mismatch' }, { status: 400 });
     }
-    // Catch duplicate key error for fields with unique index (if any, other than manually checked)
-    if (error.code === 11000) {
-        const field = Object.keys(error.keyValue)[0];
-        return NextResponse.json({ message: `Duplicate key error: ${field} already exists.` }, { status: 400 });
+    // Catch duplicate key error for fields with unique index
+    if (error.code === 11000 && error.keyValue) {
+      const field = Object.keys(error.keyValue)[0];
+      const value = error.keyValue[field];
+      let userMessage = `The value '${value}' for '${field}' already exists. Please use a different value.`;
+
+      if (field === 'serialNumber') {
+        userMessage = `Serial number '${value}' is already in use by another entry.`;
+      } else if (field === 'transitPassNo') {
+        userMessage = `Transit Pass Number '${value}' is already in use by another entry.`;
+      } else if (field === 'originFormJNo') {
+        userMessage = `Origin Form J Number '${value}' is already in use by another entry.`;
+      }
+      // Add more specific messages for other unique fields if necessary
+
+      return NextResponse.json({ message: userMessage, field: field, value: value }, { status: 400 });
     }
     return NextResponse.json({ message: 'Error updating purchase entry', error: error.message }, { status: 500 });
   }
