@@ -1,6 +1,6 @@
 {
   "name": "purchase_register",
-  "version":  "5.0.2",
+  "version":  "5.5.1",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
